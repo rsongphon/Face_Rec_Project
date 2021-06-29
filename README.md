@@ -21,7 +21,7 @@ If use CNN (Faster) it is best pratice to use with **CUDA** otherwise it will ge
 4. CUDA (use with cnn model) from NVIDIA
 5. CUDA cuDNN : GPU Accelerated library for deep neural network
 6. Tensorflow ?
-# 7. virtual enviroment : in case things go messy #
+7. virtual enviroment : in case things go messy
 
 # Installation (Windows only) #
 doing this in order
