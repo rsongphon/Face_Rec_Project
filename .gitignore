@@ -117,3 +117,4 @@ dmypy.json
 .vscode/settings.json
 *.jpg
 *.zip
+encode_faces.pkl

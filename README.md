@@ -9,11 +9,12 @@ https://pypi.org/project/face-recognition/
 https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
 https://pythonprogramming.net/facial-recognition-python/
 
-Using Deep learning (CNN and HOG)
+- Using Deep learning (CNN and HOG)
 
-If use CNN (Faster) it is best pratice to use with **CUDA** otherwise it will get really slow
+- If use CNN (Faster) it is best pratice to use with **CUDA** otherwise it will get really slow
 (Deep learning use heavy computing process so use GPU is a must)
 
+-  Pre-trained network : The network has already been trained to create 128-d embeddings. no need to train network 
 # Requirement #
 1. dlib   : contains our implementation of “deep metric learning” which is used to construct our face embeddings used for the actual recognition process.
 2. face_recognition library : wraps around dlib’s facial recognition functionality, making it easier to work with.
@@ -36,3 +37,12 @@ doing this in order
 7. install face_regcogniton via pip
 8. install other library (opencv, etc)
 
+# Problem #
+1. dataset need time to re-encoding when running script (take time) 
+    Solution : dump encoding data into binary file using pickle module (no need to encoding face every time)
+    https://arnondora.in.th/how-to-pickle-and-unpickle-python/ 
+
+2. Raspberry Pi limitation:
+    2.1 The Raspberry Pi does not have enough memory to utilize the more accurate CNN-based face detecto
+    2.2 limited to HOG instead except that HOG is far too slow on the Pi for real-time face detection
+    2.3 utilize OpenCV’s Haar cascades instead
