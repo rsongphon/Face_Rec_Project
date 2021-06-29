@@ -1,6 +1,7 @@
 import face_recognition
 import cv2
 import os
+import pickle
 
 
 # Folder Structure : Know_faces/(name of person)
@@ -17,6 +18,10 @@ FONT_THICKNESS = 2
 
 # Machice learning model
 MODEL = 'cnn'
+
+# encode face pickle file #
+
+ENCODE_FILENAME = 'encode_faces.pkl'
 
 # More tolerance = more detection but chance for error (False Positive)
 TOLERANCE = 0.6
@@ -40,41 +45,15 @@ def rescaleFrame(frame,scale):
 
     return cv2.resize(frame,dimension,interpolation=cv2.INTER_AREA)
 
-# Create empty list to contain know face and name 
-print('Loading known faces...')
-known_faces = []
-known_names = []
-
-## walk in know face directory
-for person_name in os.listdir(KNOWN_FACE_DIR):
-    # person_name is name of a known face person folder. also the name of the that person (use to label later)
-    pic_person_folder = os.path.join(KNOWN_FACE_DIR,person_name)  # Full path of person folder
-    
-    # Iterate all picture for eack person 
-    for pic_person_filename in os.listdir(pic_person_folder):
-        pic_person_filepath = os.path.join(pic_person_folder,pic_person_filename) # Full path of person picture
-        #Load an image 
-        person_image = face_recognition.load_image_file(pic_person_filepath)
-
-        # Get 128-dimension face encoding
-        # face_recognition.face_encodings return every face in image
-        # Always returns a list of found faces, For this purpose we take first face only 
-        # Assuming one face per image as you can't be twice on one image
-        # Need to make sure that train dataset have one face in image
-        encoding_face = face_recognition.face_encodings(person_image)[0] # index 0 is the first face found
-
-        # Append encoding and name
-        # will be match index together
-        known_faces.append(encoding_face)
-        known_names.append(person_name)
-print(known_names)
-
+print('Loading face encode file....')
+# load enconding faces # 
+with open(ENCODE_FILENAME,'rb') as pickle_file:
+    encoding_data = pickle.load(pickle_file)
 
 # Loading unknow face
 print('Webcam on ....')
 
 while True:
-    
 
     #Load an image 
     _,image = CAPTURE.read()
@@ -92,40 +71,40 @@ while True:
 
     for face_encoding , face_location in zip(encoding_face,location_face):
         # for each face found in picture return array of boolean of size know face array we create before
-        results = face_recognition.compare_faces(known_faces,face_encoding,TOLERANCE)
-        print(results)
+        for person_name in encoding_data:
+            results = face_recognition.compare_faces(encoding_data[person_name],face_encoding,TOLERANCE)
+            print(results)
 
-        #We can use result array to find index of know_face and print it name from know_name array (remember that it will be match)
-        # grab only index that have True boolean value
-        if True in results: # If at least one is true, get a name of first of found labels
-            match_name = known_names[results.index(True)]
-            print(match_name)
-            print(face_location)
+            #We can use result array to find index of know_face and print it name from know_name array (remember that it will be match)
+            # grab only index that have True boolean value
+            if True in results: # If at least one is true, get a name of first of found labels
+                print(person_name)
+                print(face_location)
 
-            # Grab coordiation of the face location 
-            # face_location contains positions in order: top, right, bottom, left
-            # grab (x,y) coordination for top-left and buttom- right
-            top_left = (face_location[3], face_location[0])
-            bottom_right = (face_location[1],face_location[2])
+                # Grab coordiation of the face location 
+                # face_location contains positions in order: top, right, bottom, left
+                # grab (x,y) coordination for top-left and buttom- right
+                top_left = (face_location[3], face_location[0])
+                bottom_right = (face_location[1],face_location[2])
 
-            # Get color by name using function
-            color = name_to_color(match_name)
+                # Get color by name using function
+                color = name_to_color(person_name)
 
-            # Draw rectangle 
-            cv2.rectangle(image,top_left,bottom_right,color,FRAME_THICKNESS)
+                # Draw rectangle 
+                cv2.rectangle(image,top_left,bottom_right,color,FRAME_THICKNESS)
 
-            # Another regtangle to lable the name , below the frame
-            top_left = (face_location[3], face_location[2])
-            bottom_right = (face_location[1],face_location[2]+22)
+                # Another regtangle to lable the name , below the frame
+                top_left = (face_location[3], face_location[2])
+                bottom_right = (face_location[1],face_location[2]+22)
 
-            # Paint frame
-            cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
+                # Paint frame
+                cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
 
-            # Wite a name
-            cv2.putText(image, match_name, (face_location[3] + 10, face_location[2] + 15), FONT, 0.5, (200, 200, 200), FONT_THICKNESS)
+                # Wite a name
+                cv2.putText(image, person_name, (face_location[3] + 10, face_location[2] + 15), FONT, 0.5, (200, 200, 200), FONT_THICKNESS)
 
     # Show image
-    cv2.imshow(match_name, image)
+    cv2.imshow('Frame', image)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 

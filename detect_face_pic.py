@@ -2,6 +2,8 @@ import face_recognition
 import cv2
 import os
 
+###### Sample code of face detection ###########
+### use with image only ###
 
 # Folder Structure : Know_faces/(name of person)
 # inside (name of person) is a picture of know faces of this person

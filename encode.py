@@ -59,7 +59,7 @@ for person_name , num_face in encoding_data.items():
     print('Encoding {} faces of person name {}'.format(len(num_face),person_name))
 
 
-
+# Store in a pickle file use to load later # 
 with open(ENCODE_FILENAME,'wb') as pickle_file:
     pickle.dump(encoding_data,pickle_file)
 
