@@ -1,4 +1,4 @@
-# Face_Rec_Project
+# Face_Rec_Project #
 
 
 ### First implementation ### 
@@ -46,3 +46,25 @@ doing this in order
     2.1 The Raspberry Pi does not have enough memory to utilize the more accurate CNN-based face detecto
     2.2 limited to HOG instead except that HOG is far too slow on the Pi for real-time face detection
     2.3 utilize OpenCV’s Haar cascades instead
+
+
+# Practice Specification #
+- A program is use for login staff (authentication) in companay
+- A staff stand in front of the camera to log in
+- a camera detect person from pre training network
+
+IDEA
+- A person can be log in one staff at a time
+- if more than 1 person appear in the frame >>> no face regcognize . Just detect the face 
+- Regcongnize the face and send data to server to stamp time and log-in
+- Have an algorithm to seperate morning login, noon logout (or server side do this?)
+- Program can check if person is already login in the range of given time (morning login, noon logout) : 
+    - Using API to get data from main server ?
+- Have a screen to show staff name , time after authentication
+- Have dataset encoding prepare in advance as a file to load (encoding using powerful computer) to reduce processing time
+- showing unknow face detect in the screen
+- (optinal) Have detect guest mode to detect unknow face and snapshot that face. use as and input for dataset to training and assign id
+    to remember that person and have reference to detect that person later
+- If staff face have many condition (glass , hat , scar , makeup , ETC). We need more data for this person. 
+  In this case a program must have mode to manually capture face image and send data to the server use for training later   
+
