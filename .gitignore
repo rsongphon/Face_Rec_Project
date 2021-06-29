@@ -94,6 +94,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+venv_CUDA/
 
 # Spyder project settings
 .spyderproject

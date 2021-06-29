@@ -16,7 +16,7 @@ FRAME_THICKNESS = 2
 FONT_THICKNESS = 2
 
 # Machice learning model
-MODEL = 'hog'
+MODEL = 'cnn'
 
 # More tolerance = more detection but chance for error (False Positive)
 TOLERANCE = 0.6
